@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Vector2d {
     private int x;
     private int y;
@@ -39,5 +41,18 @@ public class Vector2d {
 
     public String toString() {
         return "(" + this.x + ", " + this.y + ")";
+    }
+
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Vector2d))
+            return false;
+        return this.x == ((Vector2d) o).getX() && this.y == ((Vector2d) o).getY();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 }
