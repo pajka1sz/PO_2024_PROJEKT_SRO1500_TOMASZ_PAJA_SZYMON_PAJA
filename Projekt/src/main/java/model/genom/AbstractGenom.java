@@ -6,20 +6,31 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class AbstractGenom implements Genom {
 
     protected String genom;
-    protected int iterator = ThreadLocalRandom.current().nextInt(8);
+    protected int iterator;
 
-    //Constructor used while generating animals on nw map.
+
+    //For tests only.
+    public AbstractGenom(String createdGenom) {
+        genom = createdGenom;
+        iterator = 0;
+    }
+
+    //Constructor used while generating animals on new map.
     public AbstractGenom(int n) {
         genom = "";
         for (int i = 0; i < n; i++) {
             char newGen = generateGen();
             genom += newGen;
         }
+
+        this.iterator = ThreadLocalRandom.current().nextInt(genom.length());
     }
 
     //Constructor used when two animals reproduce.
-    public AbstractGenom(int n, int mutations, int energyFirst, String genomFirst, int energySecond, String genomSecond) {
+    public AbstractGenom(int n, int mutations, int energyFirst, Genom genomFirst, int energySecond, Genom genomSecond) {
         genom = "";
+        String genomFirstString = genomFirst.toString();
+        String genomSecondString = genomSecond.toString();
 
         double fullEnergy = energyFirst + energySecond;
 
@@ -40,12 +51,12 @@ public abstract class AbstractGenom implements Genom {
         int strongerSide = ThreadLocalRandom.current().nextInt(2);
         System.out.println(strongerSide);
         if ((energyFirst >= energySecond && strongerSide == 0) || (energySecond > energyFirst && strongerSide == 1)) {
-            genom += genomFirst.substring(0, finalNumberOfFirstGenes);
-            genom += genomSecond.substring(n - finalNumberOfSecondGenes, n);
+            genom += genomFirstString.substring(0, finalNumberOfFirstGenes);
+            genom += genomSecondString.substring(n - finalNumberOfSecondGenes, n);
         }
         else {
-            genom += genomSecond.substring(0, finalNumberOfSecondGenes);
-            genom += genomFirst.substring(n - finalNumberOfFirstGenes, n);
+            genom += genomSecondString.substring(0, finalNumberOfSecondGenes);
+            genom += genomFirstString.substring(n - finalNumberOfFirstGenes, n);
         }
 
         //The genom is created, but now we have to do some mutations.
@@ -79,8 +90,9 @@ public abstract class AbstractGenom implements Genom {
         for (int i = 0; i < mutations; i++)
             charGenom[mutationIndexes[i]] = generateMutedGen(charGenom[mutationIndexes[i]]);
         genom = String.valueOf(charGenom);
-    }
 
+        this.iterator = ThreadLocalRandom.current().nextInt(genom.length());
+    }
 
     @Override
     public char generateGen() {
@@ -98,7 +110,12 @@ public abstract class AbstractGenom implements Genom {
     }
 
     @Override
-    public String getGenom() {
+    public String toString() {
         return genom;
+    }
+
+    //For tests only
+    public int getIterator() {
+        return this.iterator;
     }
 }

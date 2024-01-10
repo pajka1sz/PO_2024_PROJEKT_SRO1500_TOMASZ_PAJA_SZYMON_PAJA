@@ -4,11 +4,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class JumpingGenom extends AbstractGenom {
 
+    //For tests only
+    public JumpingGenom(String createdGenom) {
+        super(createdGenom);
+    }
+
     public JumpingGenom(int n) {
         super(n);
     }
 
-    public JumpingGenom(int n, int mutations, int energyFirst, String genomFirst, int energySecond, String genomSecond) {
+    public JumpingGenom(int n, int mutations, int energyFirst, Genom genomFirst, int energySecond, Genom genomSecond) {
         super(n, mutations, energyFirst, genomFirst, energySecond, genomSecond);
     }
 
