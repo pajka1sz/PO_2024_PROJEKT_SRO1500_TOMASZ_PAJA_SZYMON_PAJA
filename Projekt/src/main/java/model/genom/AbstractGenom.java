@@ -32,7 +32,7 @@ public abstract class AbstractGenom implements Genom {
 
         double numberOfFirstGenes = energyFirst / fullEnergy * n;
         double numberOfSecondGenes = energySecond / fullEnergy * n;
-        System.out.println(numberOfFirstGenes + " " + numberOfSecondGenes);
+        //System.out.println(numberOfFirstGenes + " " + numberOfSecondGenes);
 
         int finalNumberOfFirstGenes = (int)numberOfFirstGenes;
         int finalNumberOfSecondGenes = (int)numberOfSecondGenes;
@@ -42,10 +42,10 @@ public abstract class AbstractGenom implements Genom {
         else if (numberOfSecondGenes - (int)numberOfSecondGenes > 0.5)
             finalNumberOfSecondGenes += 1;
 
-        System.out.println(finalNumberOfFirstGenes + " " + finalNumberOfSecondGenes);
+        //System.out.println(finalNumberOfFirstGenes + " " + finalNumberOfSecondGenes);
 
         int strongerSide = ThreadLocalRandom.current().nextInt(2);
-        System.out.println(strongerSide);
+        //System.out.println(strongerSide);
         if ((energyFirst >= energySecond && strongerSide == 0) || (energySecond > energyFirst && strongerSide == 1)) {
             genom += genomFirstString.substring(0, finalNumberOfFirstGenes);
             genom += genomSecondString.substring(n - finalNumberOfSecondGenes, n);
@@ -63,7 +63,7 @@ public abstract class AbstractGenom implements Genom {
         //Now the algorithm will randomly choose the indexes which will be muted.
         List<Integer> mutationIndexes = new ArrayList<>();
         mutationIndexes = RandomListGenerator.getRandomValues(allIndexes, mutations);
-        System.out.println(mutationIndexes.toString());
+        //System.out.println(mutationIndexes.toString());
 
         //At the end, the algorithm will mute these indexes.
 
