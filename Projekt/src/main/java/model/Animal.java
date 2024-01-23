@@ -67,23 +67,6 @@ public class Animal implements WorldElement {
         Vector2d newPosition = new Vector2d((position.add(getDirection().toUnitVector()).getX() + width) % width,
                 position.add(getDirection().toUnitVector()).getY());
 
-//        if (newPosition.getX() < boundary.lowerLeft().getX() &&
-//                newPosition.getY() >= boundary.lowerLeft().getY() &&
-//                newPosition.getY() <= boundary.upperRight().getY())
-//            position = new Vector2d(boundary.upperRight().getX(), newPosition.getY());
-//        else if (newPosition.getX() > boundary.upperRight().getX() &&
-//                newPosition.getY() >= boundary.lowerLeft().getY() &&
-//                newPosition.getY() <= boundary.upperRight().getY())
-//            position = new Vector2d(boundary.lowerLeft().getX(), newPosition.getY());
-//        else if (newPosition.getY() < boundary.lowerLeft().getY() ||
-//                newPosition.getY() > boundary.upperRight().getY()) {
-//            System.out.println("TUUUU");
-//            direction = direction.rotate(4);
-//        }
-//        else
-//            position = newPosition;
-        //Validator needed
-
         if (validator.canMoveTo(newPosition))
             position = newPosition;
         else
