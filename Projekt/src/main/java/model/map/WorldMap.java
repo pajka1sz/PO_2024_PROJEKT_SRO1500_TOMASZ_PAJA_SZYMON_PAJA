@@ -61,7 +61,8 @@ public interface WorldMap extends MoveValidator {
     WorldElement objectAt(Vector2d position);
 
     /**
-     *
+     * Function returning animals on the current map.
+     * @return HashMap of animals.
      */
     HashMap<Vector2d, List<Animal>> getAnimals();
 }
