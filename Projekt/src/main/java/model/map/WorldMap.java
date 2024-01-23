@@ -5,6 +5,9 @@ import model.Vector2d;
 import model.WorldElement;
 import model.util.MoveValidator;
 
+import java.util.HashMap;
+import java.util.List;
+
 public interface WorldMap extends MoveValidator {
     @Override
     boolean canMoveTo(Vector2d position);
@@ -56,4 +59,10 @@ public interface WorldMap extends MoveValidator {
      * @return object of WorldElement class if there is something on position or null otherwise.
      */
     WorldElement objectAt(Vector2d position);
+
+    /**
+     * Function returning animals on the current map.
+     * @return HashMap of animals.
+     */
+    HashMap<Vector2d, List<Animal>> getAnimals();
 }
