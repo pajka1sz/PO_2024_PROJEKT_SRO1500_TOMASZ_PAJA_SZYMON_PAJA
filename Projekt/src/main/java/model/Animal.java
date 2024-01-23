@@ -134,7 +134,12 @@ public class Animal implements WorldElement {
         dayOfDeath = day;
     }
 
-
+    //For going in the tunnel
+    public void throughTunnel(Vector2d newPosition) {
+        System.out.println("Stara pozycja: " + this.position);
+        this.position = newPosition;
+        System.out.println("Nowa pozycja: " + this.position);
+    }
 
 
     //Getters
