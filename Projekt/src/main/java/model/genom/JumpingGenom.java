@@ -4,11 +4,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class JumpingGenom extends AbstractGenom {
 
-    //For tests only
-    public JumpingGenom(String createdGenom) {
-        super(createdGenom);
-    }
-
     public JumpingGenom(int n) {
         super(n);
     }
@@ -18,7 +13,7 @@ public class JumpingGenom extends AbstractGenom {
     }
 
     @Override
-    public int getGen() {
+    public int getNextGen() {
         double rand = Math.random();
         System.out.println(rand);
         if (rand < 0.8) {

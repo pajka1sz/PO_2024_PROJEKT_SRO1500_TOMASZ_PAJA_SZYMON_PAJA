@@ -38,6 +38,6 @@ public class JumpingGenomTest {
     public void testGetGen() {
         JumpingGenom genom = new JumpingGenom(4, 2, 50, new NormalGenom(4), 150, new NormalGenom(4));
 
-        assertEquals((int) genom.toString().charAt(genom.getIterator()) - 48, genom.getGen());
+        assertEquals((int) genom.toString().charAt(genom.getIterator()) - 48, genom.getNextGen());
     }
 }

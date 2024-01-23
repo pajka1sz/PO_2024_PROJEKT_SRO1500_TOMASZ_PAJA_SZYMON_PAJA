@@ -3,11 +3,6 @@ package model.genom;
 
 public class NormalGenom extends AbstractGenom {
 
-    //For tests only
-    public NormalGenom(String createdGenom) {
-        super(createdGenom);
-    }
-
     public NormalGenom(int n) {
         super(n);
     }
@@ -17,7 +12,7 @@ public class NormalGenom extends AbstractGenom {
     }
 
     @Override
-    public int getGen() {
+    public int getNextGen() {
         char result = genom.charAt(iterator);
         iterator = (iterator + 1) % genom.length();
         return result - '0';

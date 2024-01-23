@@ -3,10 +3,11 @@ package model.genom;
 public interface Genom {
     /**
      * Function which returns the gen on next or random position (it depends on the type of genom).
+     * Firstly it get gen from genom at iterator position and then moves iterator.
      *
-     * @return gen on proper position.
+     * @return next gen.
      */
-    int getGen();
+    int getNextGen();
 
     /**
      * Function which generates exactly one gen.

@@ -38,6 +38,6 @@ public class NormalGenomTest {
     public void testGetGen() {
         NormalGenom genom = new NormalGenom(4, 2, 50, new NormalGenom(4), 150, new NormalGenom(4));
 
-        assertEquals((int) genom.toString().charAt(genom.getIterator()) - 48, genom.getGen());
+        assertEquals((int) genom.toString().charAt(genom.getIterator()) - 48, genom.getNextGen());
     }
 }

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public enum MapDirection {
     NORTH,
     NORTH_EAST,
@@ -36,6 +38,21 @@ public enum MapDirection {
         };
     }
 
+    public static MapDirection generateDirection() {
+        int rand = ThreadLocalRandom.current().nextInt(8);
+        return switch (rand) {
+            case 0 -> NORTH;
+            case 1 -> NORTH_EAST;
+            case 2 -> EAST;
+            case 3 -> SOUTH_EAST;
+            case 4 -> SOUTH;
+            case 5 -> SOUTH_WEST;
+            case 6 -> WEST;
+            case 7 -> NORTH_WEST;
+            default -> null;
+        };
+    }
+
     public Vector2d toUnitVector() {
         return switch(this) {
             case NORTH -> new Vector2d(0, 1);
@@ -46,6 +63,19 @@ public enum MapDirection {
             case SOUTH_WEST -> new Vector2d(-1, -1);
             case WEST -> new Vector2d(-1, 0);
             case NORTH_WEST -> new Vector2d(-1, 1);
+        };
+    }
+
+    public String toString() {
+        return switch (this) {
+            case NORTH -> "0";
+            case NORTH_EAST -> "1";
+            case EAST -> "2";
+            case SOUTH_EAST -> "3";
+            case SOUTH -> "4";
+            case SOUTH_WEST -> "5";
+            case WEST -> "6";
+            case NORTH_WEST -> "7";
         };
     }
 }
