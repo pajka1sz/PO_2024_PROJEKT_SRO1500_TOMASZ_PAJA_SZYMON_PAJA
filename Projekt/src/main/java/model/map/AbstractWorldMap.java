@@ -1,9 +1,6 @@
 package model.map;
 
-import model.Animal;
-import model.GenomType;
-import model.Plant;
-import model.Vector2d;
+import model.*;
 import model.util.AnimalsListComparator;
 import model.util.RandomListGenerator;
 
@@ -238,6 +235,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     public HashMap<Vector2d, List<Animal>> getAnimals() {
         return animals;
     }
+
+    public abstract HashMap<Vector2d, List<WorldElement>> getElements();
 
     public int getAnimalsAlive() {
         return animalsAlive;

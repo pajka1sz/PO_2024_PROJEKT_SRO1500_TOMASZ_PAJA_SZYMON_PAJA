@@ -65,4 +65,10 @@ public interface WorldMap extends MoveValidator {
      * @return HashMap of animals.
      */
     HashMap<Vector2d, List<Animal>> getAnimals();
+
+    /**
+     * Function which returns interesting elements on the map
+     * @return HashMap of WorldElements.
+     */
+    HashMap<Vector2d, List<WorldElement>> getElements();
 }

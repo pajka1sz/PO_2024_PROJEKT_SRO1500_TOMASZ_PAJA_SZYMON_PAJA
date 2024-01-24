@@ -52,6 +52,24 @@ public class Globe extends AbstractWorldMap {
     }
 
     @Override
+    public HashMap<Vector2d, List<WorldElement>> getElements() {
+        HashMap<Vector2d, List<WorldElement>> elements = new HashMap<>();
+        for (Vector2d position: animals.keySet()) {
+            ArrayList<WorldElement> listToPut = new ArrayList<>();
+            listToPut.add(animals.get(position).get(0));
+            elements.put(position, listToPut);
+        }
+        for (Vector2d position: plants.keySet()) {
+            List<WorldElement> listToPut = new ArrayList<>();
+            if (elements.get(position) != null)
+                listToPut = elements.get(position);
+            listToPut.add(plants.get(position));
+            elements.put(position, listToPut);
+        }
+        return elements;
+    }
+
+    @Override
     public boolean isOccupied(Vector2d position) {
         return plants.containsKey(position) || animals.containsKey(position);
     }
