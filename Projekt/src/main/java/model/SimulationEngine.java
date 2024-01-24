@@ -54,12 +54,12 @@ public class SimulationEngine {
         for (Thread thread: threadList) {
             thread.start();
         }
-        try {
-            awaitSimulationsEnd();
-        }
-        catch (InterruptedException exception) {
-            System.out.println("Thread interrupt exception occurred.");
-        }
+//        try {
+//            awaitSimulationsEnd();
+//        }
+//        catch (InterruptedException exception) {
+//            System.out.println("Thread interrupt exception occurred.");
+//        }
     }
 
     public void runAsyncWithThreadPool() {

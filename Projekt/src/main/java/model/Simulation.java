@@ -41,9 +41,10 @@ public class Simulation implements Runnable {
             map.reproduce();
             map.addPlants();
             //mapChanged("Zmiana");
+            System.out.println(map);
             map.mapChanged(map, "Ruch");
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException exception) {
                 throw new RuntimeException();
             }

@@ -1,5 +1,6 @@
 package model.map;
 
+import javafx.application.Platform;
 import model.*;
 import model.observers.MapChangeListener;
 import model.util.AnimalsListComparator;
@@ -121,7 +122,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void mapChanged(WorldMap map, String message) {
         if (observer != null) {
             System.out.println("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALOOOOOOOOOOOOOOOOOOO");
-            observer.mapChanged(this, message);
+            Platform.runLater (() -> {
+                observer.mapChanged(this, message);
+            });
         }
     }
 

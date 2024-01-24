@@ -75,6 +75,13 @@ public class TunnelMap extends AbstractWorldMap {
             listToPut.add(animals.get(position).get(0));
             elements.put(position, listToPut);
         }
+        for (Vector2d position: plants.keySet()) {
+            List<WorldElement> listToPut = new ArrayList<>();
+            if (elements.get(position) != null)
+                listToPut = elements.get(position);
+            listToPut.add(plants.get(position));
+            elements.put(position, listToPut);
+        }
         for (Vector2d position: entries.keySet()) {
             List<WorldElement> listToPut = new ArrayList<>();
             if (elements.get(position) != null)
@@ -87,13 +94,6 @@ public class TunnelMap extends AbstractWorldMap {
             if (elements.get(position) != null)
                 listToPut = elements.get(position);
             listToPut.add(exits.get(position));
-            elements.put(position, listToPut);
-        }
-        for (Vector2d position: plants.keySet()) {
-            List<WorldElement> listToPut = new ArrayList<>();
-            if (elements.get(position) != null)
-                listToPut = elements.get(position);
-            listToPut.add(plants.get(position));
             elements.put(position, listToPut);
         }
         return elements;

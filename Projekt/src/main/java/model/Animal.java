@@ -104,6 +104,7 @@ public class Animal implements WorldElement {
         if (parent1 != null && parent2 != null) {
             parent1.addGrandchild();
             parent2.addGrandchild();
+            System.out.println(parent1 + " " + parent2);
         }
     }
 

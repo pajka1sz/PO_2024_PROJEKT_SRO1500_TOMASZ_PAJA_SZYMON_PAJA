@@ -5,58 +5,61 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="presenter.StartPresenter"
-            alignment="CENTER"
-            spacing="10"
-            minHeight="400.0" minWidth="900.0">
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="presenter.StartPresenter"
+        alignment="CENTER"
+        spacing="10"
+        minHeight="400.0" minWidth="900.0">
     <Label text="Configure your simulation!" style="-fx-font-size: 20px;"/>
-    <HBox alignment="CENTER" spacing="6" style="-fx-font-size:15px;">
-        <Label text="Map height:"/>
-        <ComboBox fx:id="height" prefWidth="80"/>
-        <Label text="Map width:"/>
-        <ComboBox fx:id="width" prefWidth="80"/>
-        <Label text="Animals:"/>
-        <Spinner fx:id="animalsAmount" prefWidth="80"/>
-        <Label text="Grass:"/>
-        <Spinner fx:id="grassAmount" prefWidth="80"/>
-    </HBox>
-    <HBox alignment="CENTER" spacing="6" style="-fx-font-size:15px;">
-        <Label text="Stert energy:"/>
-        <Spinner fx:id="startEnergy" prefWidth="80"/>
-        <Label text="Grass energy:"/>
-        <ComboBox fx:id="grassEnergy" prefWidth="80"/>
-        <Label text="Grass by day:"/>
-        <ComboBox fx:id="grassByDay" prefWidth="80"/>
-    </HBox>
-    <HBox alignment="CENTER" spacing="6" style="-fx-font-size:15px;">
-        <Label text="Energy needed to reproduce:"/>
-        <ComboBox fx:id="energyToReproduce" prefWidth="80"/>
-        <Label text="Energy lost on reproduce:"/>
-        <ComboBox fx:id="reproduceEnergy" prefWidth="80"/>
-        <Label text="Energy lost every day:"/>
-        <ComboBox fx:id="energyLostEveryDay" prefWidth="80"/>
-    </HBox>
-    <HBox alignment="CENTER" spacing="6" style="-fx-font-size:15px;">
-        <Label text="Genom length:"/>
-        <ComboBox fx:id="genLength"/>
-        <Label text="Minimal gen mutations:"/>
-        <ComboBox fx:id="minimalGenMutations" prefWidth="80" onAction="#setMinimalGenMutations"/>
-        <Label text="Max gen mutations:"/>
-        <ComboBox fx:id="maximalGenMutations" prefWidth="80" onAction="#setMaximalGenMutations"/>
-    </HBox>
-    <HBox alignment="CENTER" spacing="6" style="-fx-font-size:15px;">
-        <Label text="Crazy genom:"/>
-        <CheckBox fx:id="crazyGenom"/>
-        <Label text="Tunnels:"/>
-        <CheckBox fx:id="tunnel"/>
-        <Label text="Tunnel amount:"/>
-        <ComboBox fx:id="tunnelNumber" prefWidth="80"/>
+    <HBox alignment="CENTER" spacing="20">
+        <VBox spacing="6" style="-fx-font-size:15px;">
+            <Label text="Map height:"/>
+            <ComboBox fx:id="height" prefWidth="80"/>
+            <Label text="Animals:"/>
+            <Spinner fx:id="animalsAmount" prefWidth="80"/>
+            <Label text="Start energy:"/>
+            <Spinner fx:id="startEnergy" prefWidth="80"/>
+        </VBox>
+        <VBox spacing="6" style="-fx-font-size:15px;">
+            <Label text="Map width:"/>
+            <ComboBox fx:id="width" prefWidth="80"/>
+            <Label text="Grass:"/>
+            <Spinner fx:id="grassAmount" prefWidth="80"/>
+            <Label text="Grass energy:"/>
+            <ComboBox fx:id="grassEnergy" prefWidth="80"/>
+            <Label text="Grass by day:"/>
+            <ComboBox fx:id="grassByDay" prefWidth="80"/>
+        </VBox>
+        <VBox spacing="6" style="-fx-font-size:15px;">
+            <Label text="Energy needed"/>
+            <Label text="to reproduce:"/>
+            <ComboBox fx:id="energyToReproduce" prefWidth="80"/>
+            <Label text="Energy lost"/>
+            <Label text="on reproduce:"/>
+            <ComboBox fx:id="reproduceEnergy" prefWidth="80"/>
+            <Label text="Energy lost"/>
+            <Label text="every day:"/>
+            <ComboBox fx:id="energyLostEveryDay" prefWidth="80"/>
+        </VBox>
+        <VBox spacing="6" style="-fx-font-size:15px;">
+            <Label text="Genom length:"/>
+            <ComboBox fx:id="genLength"/>
+            <Label text="Minimal gen mutations:"/>
+            <ComboBox fx:id="minimalGenMutations" prefWidth="80" onAction="#setMinimalGenMutations"/>
+            <Label text="Max gen mutations:"/>
+            <ComboBox fx:id="maximalGenMutations" prefWidth="80" onAction="#setMaximalGenMutations"/>
+        </VBox>
+        <VBox spacing="6" style="-fx-font-size:15px;">
+            <Label text="Crazy genom:"/>
+            <CheckBox fx:id="crazyGenom"/>
+            <Label text="Tunnels:"/>
+            <CheckBox fx:id="tunnel"/>
+            <Label text="Tunnel amount:"/>
+            <ComboBox fx:id="tunnelNumber" prefWidth="80"/>
+        </VBox>
     </HBox>
     <HBox alignment="CENTER">
         <Button onAction="#startClicked" prefWidth="150" prefHeight="50">Start</Button>
     </HBox>
-
 </VBox>

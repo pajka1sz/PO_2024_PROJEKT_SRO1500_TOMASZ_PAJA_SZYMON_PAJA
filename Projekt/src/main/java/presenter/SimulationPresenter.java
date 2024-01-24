@@ -29,9 +29,6 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
 
-    @FXML
-    private Label test;
-
     private double maxAnimalEnergy;
     private double averageAnimalEnergy;
     private boolean pause = false;
@@ -95,11 +92,11 @@ public class SimulationPresenter implements MapChangeListener {
         System.out.println(message);
         updateStats(map);
         updateAnimalStats(testAnimal);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-
-        }
+//        try {
+//            Thread.sleep(50);
+//        } catch (InterruptedException e) {
+//
+//        }
     }
 
     private void clearGrid() {
@@ -147,6 +144,7 @@ public class SimulationPresenter implements MapChangeListener {
         }
 
         HashMap<Vector2d, List<WorldElement>> elements = map.getElements();
+        System.out.println(elements);
         for (Vector2d position: elements.keySet()) {
             Node objectPlacedOnTheGrid = null;
             Label label = new Label();
@@ -160,9 +158,10 @@ public class SimulationPresenter implements MapChangeListener {
                     objectPlacedOnTheGrid = createPlant();
                 else if (elements.get(position).get(i) instanceof Tunnel)
                     objectPlacedOnTheGrid = createTunnel();
+
+                GridPane.setHalignment(objectPlacedOnTheGrid, HPos.CENTER);
+                mapGrid.add(objectPlacedOnTheGrid, position.getX() + 1, position.getY() + 1);
             }
-            GridPane.setHalignment(objectPlacedOnTheGrid, HPos.CENTER);
-            mapGrid.add(objectPlacedOnTheGrid, position.getX() + 1, position.getY() + 1);
             //label.setText(elements.get(position).get(i).toString());
             GridPane.setHalignment(label, HPos.CENTER);
         }

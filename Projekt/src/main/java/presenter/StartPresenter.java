@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.GenomType;
 import model.Simulation;
@@ -51,6 +52,16 @@ public class StartPresenter {
     @FXML
     public ComboBox<Integer> reproduceEnergy;
 
+    // Ustawienie TextFormattera dla TextField
+    TextFormatter<Integer> textFormatter = new TextFormatter<>(
+            c -> {
+                if (c.getControlNewText().matches("-?\\d*")) {
+                    return c;
+                } else {
+                    return null;
+                }
+            }
+    );
 
     @FXML
     private void initialize() {
@@ -67,7 +78,7 @@ public class StartPresenter {
         }
         grassEnergy.setValue(5);
         genLength.setValue(5);
-        energyLostEveryDay.setValue(5);
+        energyLostEveryDay.setValue(2);
         for (int i = 0; i <= 10; i++) {
             energyToReproduce.getItems().add(i);
         }
@@ -80,6 +91,10 @@ public class StartPresenter {
 
         SpinnerValueFactory<Integer> startEnergySpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 5);
         startEnergy.setValueFactory(startEnergySpinner);
+        startEnergy.setEditable(true);
+
+        TextField textField = startEnergy.getEditor();
+        textField.setTextFormatter(textFormatter);
 
         setTunnelNumber();
         setAnimalAmount();
@@ -101,12 +116,40 @@ public class StartPresenter {
     private void setAnimalAmount() {
         SpinnerValueFactory<Integer> animals = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, width.getValue()* height.getValue(), 10);
         animalsAmount.setValueFactory(animals);
+        animalsAmount.setEditable(true);
+
+        TextFormatter<Integer> textFormatter = new TextFormatter<>(
+                c -> {
+                    if (c.getControlNewText().matches("-?\\d*")) {
+                        return c;
+                    } else {
+                        return null;
+                    }
+                }
+        );
+
+        TextField textField2 = animalsAmount.getEditor();
+        textField2.setTextFormatter(textFormatter);
     }
 
     @FXML
     private void setGrassAmount() {
         SpinnerValueFactory<Integer> grass = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, width.getValue()* height.getValue(), 10);
         grassAmount.setValueFactory(grass);
+        grassAmount.setEditable(true);
+
+        TextFormatter<Integer> textFormatter = new TextFormatter<>(
+                c -> {
+                    if (c.getControlNewText().matches("-?\\d*")) {
+                        return c;
+                    } else {
+                        return null;
+                    }
+                }
+        );
+
+        TextField textField = grassAmount.getEditor();
+        textField.setTextFormatter(textFormatter);
     }
 
     @FXML
@@ -115,7 +158,7 @@ public class StartPresenter {
         for (int i = 0; i < width.getValue()*height.getValue(); i++) {
             grassByDay.getItems().add(i);
         }
-        grassByDay.setValue(15);
+        grassByDay.setValue(7);
     }
 
     @FXML
@@ -184,9 +227,9 @@ public class StartPresenter {
         map.subscribe(presenter);
         presenter.initializePresenter(map);
 
-//        SimulationEngine engine = new SimulationEngine(List.of(simulation));
-//        engine.runAsync();
-        simulation.run();
+        SimulationEngine engine = new SimulationEngine(List.of(simulation));
+        engine.runAsyncWithThreadPool();
+        //simulation.run();
 
 
     }

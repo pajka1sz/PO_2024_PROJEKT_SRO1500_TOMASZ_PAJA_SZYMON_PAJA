@@ -21,7 +21,6 @@
     <VBox prefWidth="700">
         <Label fx:id="days" text="Days: " textAlignment="CENTER" style="-fx-font-size: 30px;"/>
         <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER"/>
-        <Label fx:id="test" textAlignment="CENTER"/>
     </VBox>
     <VBox prefWidth="300" alignment="CENTER">
         <Label text="Animal info: " style="-fx-font-size: 20px;"/>
