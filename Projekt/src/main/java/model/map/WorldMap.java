@@ -95,4 +95,10 @@ public interface WorldMap extends MoveValidator {
     void mapChanged(WorldMap map, String message);
 
     int getCurrentDay();
+
+    double averageNumberOfChildren();
+
+    String getMostPopularGenom();
+
+    double averageAnimalEnergy();
 }

@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      minHeight="550.0" minWidth="850.0"
+      minHeight="700.0" minWidth="850.0"
       fx:controller="presenter.SimulationPresenter">
     <VBox prefWidth="300" alignment="CENTER">
-        <Label text="Map info:" textAlignment="CENTER" style="-fx-font-size: 20px;"/>
-        <Label fx:id="animalNumber" text="Number of animals: "/>
+        <Label text="Map info:" textAlignment="CENTER" style="-fx-font-size: 25px;"/>
+        <Label fx:id="animalNumber" text="Number of animals: " style="-fx-font-size: 25px;"/>
         <Label fx:id="grassNumber" text="Number of grass: "/>
-        <Label fx:id="freePlacesNumber" text="Number of free places: "/>
-        <Label fx:id="averageEnergy" text="Average animal energy: "/>
-<!--        <Label fx:id="averageNumberOfKids" text="Average number of kids: "/>-->
-        <Label fx:id="averageLengthOfLifeOfDeadAnimal" text="Average length of life of dead animal: "/>
+        <Label fx:id="freePlacesNumber" text="Number of free places: " style="-fx-font-size: 25px;"/>
+        <Label fx:id="averageEnergy" text="Average animal energy: " style="-fx-font-size: 25px;"/>
+        <Label fx:id="averageNumberOfKids" text="Average number of kids: " style="-fx-font-size: 25px;"/>
+        <Label fx:id="averageLengthOfLifeOfDeadAnimal" text="Average length of life of dead animal: " style="-fx-font-size: 25px;"/>
+        <Label fx:id="mostPopularGenom" text="Most popular genom: " style="-fx-font-size: 25px;"/>
+        <Label text="Click space to show equator" style="-fx-font-size: 20px;"/>
     </VBox>
     <VBox prefWidth="700">
         <Label fx:id="days" text="Days: " textAlignment="CENTER" style="-fx-font-size: 30px;"/>
         <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER"/>
     </VBox>
     <VBox prefWidth="300" alignment="CENTER">
-        <Label text="Animal info: " style="-fx-font-size: 20px;"/>
+        <Label text="Animal info: " style="-fx-font-size: 25px;"/>
         <Label text="Genom: " fx:id="genom"/>
         <Label text="Active gen: " fx:id="actualGen"/>
         <Label text="Actual energy: " fx:id="actualEnergy"/>

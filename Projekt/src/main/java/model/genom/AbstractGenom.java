@@ -28,11 +28,12 @@ public abstract class AbstractGenom implements Genom {
         String genomFirstString = genomFirst.toString();
         String genomSecondString = genomSecond.toString();
 
+        mutations = Math.min(mutations, n);
+
         double fullEnergy = energyFirst + energySecond;
 
         double numberOfFirstGenes = energyFirst / fullEnergy * n;
         double numberOfSecondGenes = energySecond / fullEnergy * n;
-        //System.out.println(numberOfFirstGenes + " " + numberOfSecondGenes);
 
         int finalNumberOfFirstGenes = (int)numberOfFirstGenes;
         int finalNumberOfSecondGenes = (int)numberOfSecondGenes;
@@ -42,10 +43,16 @@ public abstract class AbstractGenom implements Genom {
         else if (numberOfSecondGenes - (int)numberOfSecondGenes > 0.5)
             finalNumberOfSecondGenes += 1;
 
-        //System.out.println(finalNumberOfFirstGenes + " " + finalNumberOfSecondGenes);
 
         int strongerSide = ThreadLocalRandom.current().nextInt(2);
-        //System.out.println(strongerSide);
+
+        if (finalNumberOfFirstGenes + finalNumberOfSecondGenes < n) {
+            if (strongerSide == 0)
+                finalNumberOfFirstGenes += 1;
+            else
+                finalNumberOfSecondGenes += 1;
+        }
+
         if ((energyFirst >= energySecond && strongerSide == 0) || (energySecond > energyFirst && strongerSide == 1)) {
             genom += genomFirstString.substring(0, finalNumberOfFirstGenes);
             genom += genomSecondString.substring(n - finalNumberOfSecondGenes, n);
@@ -60,20 +67,20 @@ public abstract class AbstractGenom implements Genom {
         for (int i = 0; i < n; i++)
             allIndexes.add(i);
 
+
         //Now the algorithm will randomly choose the indexes which will be muted.
         List<Integer> mutationIndexes = new ArrayList<>();
         mutationIndexes = RandomListGenerator.getRandomValues(allIndexes, mutations);
-        //System.out.println(mutationIndexes.toString());
 
         //At the end, the algorithm will mute these indexes.
 
         //Since strings are immutable in Java, the algorithm firstly converts genom to an array of chars,
         //then replaces the specified character with the muted gen and then converts it back to the string.
         char[] charGenom = genom.toCharArray();
-        for (int i = 0; i < mutations; i++)
+        for (int i = 0; i < mutations; i+=1)
             charGenom[mutationIndexes.get(i)] = generateMutedGen(charGenom[mutationIndexes.get(i)]);
-        genom = String.valueOf(charGenom);
 
+        genom = String.valueOf(charGenom);
         this.iterator = ThreadLocalRandom.current().nextInt(genom.length());
     }
 
@@ -84,11 +91,14 @@ public abstract class AbstractGenom implements Genom {
     }
 
     @Override
-    public char generateMutedGen(char genToBeMuted) {
+    public synchronized char generateMutedGen(char genToBeMuted) {
+        System.out.println("Generowanie");
         int intGenToBeMuted = genToBeMuted - '0';
         int newGen = ThreadLocalRandom.current().nextInt(7);
-        if (newGen >= intGenToBeMuted)
+        System.out.println(newGen);
+        if (newGen >= intGenToBeMuted && newGen < 7)
             newGen += 1;
+        System.out.println("Po zwiększeniu: " + newGen);
         return (char)(newGen + '0');
     }
 

@@ -89,7 +89,7 @@ public class StartPresenter {
         reproduceEnergy.setValue(5);
 
 
-        SpinnerValueFactory<Integer> startEnergySpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 5);
+        SpinnerValueFactory<Integer> startEnergySpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 10);
         startEnergy.setValueFactory(startEnergySpinner);
         startEnergy.setEditable(true);
 

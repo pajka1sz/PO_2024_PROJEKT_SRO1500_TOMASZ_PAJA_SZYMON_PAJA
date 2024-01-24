@@ -16,14 +16,12 @@ import javafx.scene.shape.Rectangle;
 import model.*;
 import model.map.WorldMap;
 import model.observers.MapChangeListener;
-import org.w3c.dom.css.Rect;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 
 public class SimulationPresenter implements MapChangeListener {
-    private final int CELL_SIZE = 40;
+    private int customCellSize;
     private WorldMap map;
 
     @FXML
@@ -65,10 +63,16 @@ public class SimulationPresenter implements MapChangeListener {
     Label daysLived;
     @FXML
     Label deathDay;
+    @FXML
+    Label mostPopularGenom;
 
     private Animal testAnimal;
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation;
+    }
 
     public void initializePresenter(WorldMap map){
+        mapGrid.getScene().addEventFilter(KeyEvent.KEY_PRESSED, this::spacePressed);
         pause = false;
         this.map = map;
         for (Vector2d position: map.getAnimals().keySet()) {
@@ -82,7 +86,6 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
-        System.out.println("TUUUUUUUUUUUUUUUUUUUUUUUUUUUUOOOOOOOOOOOOOOOOOO");
         drawMap(message, this.map);
     }
 
@@ -92,11 +95,6 @@ public class SimulationPresenter implements MapChangeListener {
         System.out.println(message);
         updateStats(map);
         updateAnimalStats(testAnimal);
-//        try {
-//            Thread.sleep(50);
-//        } catch (InterruptedException e) {
-//
-//        }
     }
 
     private void clearGrid() {
@@ -106,16 +104,17 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void updateGrid(WorldMap map) {
-        calculateMaxAndAverageAnimalEnergy();
+        calculateSizeOfCell();
+        calculateMaxAnimalEnergy();
         Label label00 = new Label();
         mapGrid.add(label00, 0, 0);
         label00.setText("y\\x");
         GridPane.setHalignment(label00, HPos.CENTER);
 
         for (int i = 0; i < map.getWidth() + 1; i++)
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_SIZE));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(customCellSize));
         for (int i = 0; i < map.getHeight() + 1; i++)
-            mapGrid.getRowConstraints().add(new RowConstraints(CELL_SIZE));
+            mapGrid.getRowConstraints().add(new RowConstraints(customCellSize));
 
         //Rows' names
         for (int i = 1; i <= map.getWidth(); i++) {
@@ -136,7 +135,7 @@ public class SimulationPresenter implements MapChangeListener {
         if (pause) {
             for (int i = map.getEquatorBottomLane(); i <= map.getEquatorUpLane(); i++) {
                 for (int j = 0; j < map.getWidth(); j++) {
-                    Rectangle onEquatorPosition = new Rectangle(CELL_SIZE, CELL_SIZE, Color.rgb(0, 255, 0));
+                    Rectangle onEquatorPosition = new Rectangle(customCellSize, customCellSize, Color.rgb(0, 255, 0));
                     GridPane.setHalignment(onEquatorPosition, HPos.CENTER);
                     mapGrid.add(onEquatorPosition, j+1, i+1);
                 }
@@ -162,58 +161,60 @@ public class SimulationPresenter implements MapChangeListener {
                 GridPane.setHalignment(objectPlacedOnTheGrid, HPos.CENTER);
                 mapGrid.add(objectPlacedOnTheGrid, position.getX() + 1, position.getY() + 1);
             }
-            //label.setText(elements.get(position).get(i).toString());
             GridPane.setHalignment(label, HPos.CENTER);
         }
     }
 
     private Node createAnimal(Animal animal, Vector2d position) {
         double animalEnergyInComparison = animal.getEnergy() / maxAnimalEnergy;
-        Color animalColor = Color.rgb((int) animalEnergyInComparison * 255, 0, 255);
+        Color animalColor;
+        if (animalEnergyInComparison >= 0.8)
+            animalColor = Color.rgb(102, 0, 255);
+        else if (animalEnergyInComparison >= 0.6)
+            animalColor = Color.rgb(153, 51, 255);
+        else if (animalEnergyInComparison >= 0.3)
+            animalColor = Color.rgb(204, 0, 255);
+        else
+            animalColor = Color.rgb(240, 179, 255);
 
-        Rectangle background = new Rectangle(CELL_SIZE, CELL_SIZE, Color.TRANSPARENT);
-        Node drawAnimal = new Rectangle(CELL_SIZE * 0.8, CELL_SIZE * 0.8, animalColor);
-        background.setMouseTransparent(false);
+        Node drawAnimal = new Rectangle(customCellSize * 0.75, customCellSize * 0.75, animalColor);
         drawAnimal.setMouseTransparent(true);
-        GridPane.setHalignment(background, HPos.CENTER);
-        mapGrid.add(background, position.getX() + 1, position.getY() + 1);
 
-        //Po kliknięciu na background mają się wyświetlać informacje
-        //background.setOnMouseClicked(event -> animalInfoDislpay(animal));
         return drawAnimal;
     }
 
     private Node createPlant() {
-        Rectangle drawPlant = new Rectangle(CELL_SIZE * 0.6, CELL_SIZE * 0.6, Color.rgb(0, 204, 0));
+        Rectangle drawPlant = new Rectangle(customCellSize * 0.6, customCellSize * 0.6, Color.rgb(0, 204, 0));
         return drawPlant;
     }
 
     private Node createTunnel() {
-        Circle drawTunnel = new Circle((double) CELL_SIZE * 0.5, Color.rgb(102, 51, 0));
+        Circle drawTunnel = new Circle((double) customCellSize * 0.5, Color.rgb(102, 51, 0));
         return drawTunnel;
     }
 
-    private void calculateMaxAndAverageAnimalEnergy() {
-        double sum = 0;
+    private void calculateMaxAnimalEnergy() {
         HashMap<Vector2d, List<Animal>> animals = map.getAnimals();
         for (Vector2d position: animals.keySet()) {
-            for (Animal animal : animals.get(position)) {
+            for (Animal animal : animals.get(position))
                 maxAnimalEnergy = Math.max(maxAnimalEnergy, animal.getEnergy());
-                sum += animal.getEnergy();
-            }
         }
-        averageAnimalEnergy = sum / map.getAnimalsAlive();
+    }
+
+    private void calculateSizeOfCell() {
+        customCellSize = (int) (500 / (map.getWidth()+1));
     }
 
     private void updateStats(WorldMap map) {
         days.setText("Days: " + map.getCurrentDay());
         animalNumber.setText("Number of animals: " + map.getAnimalsAlive());
         grassNumber.setText("Number of grass: " + map.getNumOfPlants());
-        freePlacesNumber.setText("Free places: " + map.getNumOfFreePositions());
-        averageEnergy.setText("Average animal energy: " + averageAnimalEnergy);
-        //averageNumberOfKids.setText("Average number of kids: "+ );
-        averageLengthOfLifeOfDeadAnimal.setText("Average length of life\nof dead animal: " + map.getAverageLifeLengthOfDeadAnimals());
-
+        freePlacesNumber.setText("Free places: " + Math.round(map.getNumOfFreePositions() * 100.0) / 100.0);
+        averageEnergy.setText("Average animal energy: " + Math.round(map.averageAnimalEnergy() * 100.0) / 100.0);
+        averageNumberOfKids.setText("Average number of kids: " + Math.round(map.averageNumberOfChildren() * 100.0) / 100.0);
+        averageLengthOfLifeOfDeadAnimal.setText("Average length of life\nof dead animal: " +
+                Math.round(map.getAverageLifeLengthOfDeadAnimals() * 100.0) / 100.0);
+        mostPopularGenom.setText("Most popular genom: " + map.getMostPopularGenom());
     }
 
     private void updateAnimalStats(Animal animal) {
@@ -225,5 +226,18 @@ public class SimulationPresenter implements MapChangeListener {
         descendantsNumber.setText("Descendants number: " + animal.getAllChildren());
         daysLived.setText("Days alive: " + animal.getDaysAlive());
         deathDay.setText("Death day: " + animal.getDayOfDeath());
+    }
+
+    @FXML
+    private void spacePressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.SPACE) {
+            pause = !pause;
+            if (pause) {
+                simulation.pauseThreadSimulation();
+            } else {
+                simulation.continueThreadSimulation();
+            }
+            drawMap("", map);
+        }
     }
 }

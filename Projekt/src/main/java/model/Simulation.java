@@ -7,6 +7,8 @@ import model.map.WorldMap;
 import model.observers.MapChangeListener;
 
 public class Simulation implements Runnable {
+    private static int ID = 1;
+    private int id;
     private final WorldMap map;
     private MapChangeListener observer;
     private boolean threadPause = false;
@@ -24,7 +26,8 @@ public class Simulation implements Runnable {
                     numOfStartAnimals, startAnimalEnergy, energyLostEveryDay, energyNeededToBeReadyToReproduce,
                     energyLostToReproduce, minMutations, maxMutations, genomType, genomLength, numOfTunnels);
         };
-        //mapChanged("Czas start");
+        this.id = ID;
+        ID += 1;
     }
 
     private volatile boolean stopSimulation = false;
@@ -34,7 +37,13 @@ public class Simulation implements Runnable {
     }
 
     public void run() {
-        while (!stopSimulation && map.getAnimals().size() > 0) {
+        String path = "Life_" + (this.getId()) + ".csv";
+        CSVFile csvFile = new CSVFile(map);
+        csvFile.createCsvFile(path);
+
+        isPaused();
+        while (map.getAnimals().size() > 0) {
+            isPaused();
             map.removeDeadAnimals();
             map.moveAnimals();
             map.eatPlants();
@@ -43,6 +52,7 @@ public class Simulation implements Runnable {
             //mapChanged("Zmiana");
             System.out.println(map);
             map.mapChanged(map, "Ruch");
+            csvFile.addRowToCsv(path);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException exception) {
@@ -54,5 +64,38 @@ public class Simulation implements Runnable {
 
     public WorldMap getMap() {
         return this.map;
+    }
+
+    public void pauseThreadSimulation() {
+        threadPause = true;
+    }
+
+    public void continueThreadSimulation(){
+        synchronized(GUI_PAUSE) {
+            threadPause = false;
+            GUI_PAUSE.notify();
+        }
+//        threadPause = false;
+//        notifyAll();
+    }
+
+    private void isPaused() {
+        synchronized (GUI_PAUSE) {
+            while (threadPause) {
+                try {
+                    GUI_PAUSE.wait();
+                } catch (Exception exception) {
+
+                }
+            }
+        }
+    }
+
+    public boolean isThreadPaused() {
+        return threadPause;
+    }
+
+    private int getId() {
+        return this.id;
     }
 }

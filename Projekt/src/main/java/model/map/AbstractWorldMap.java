@@ -233,7 +233,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                     list.remove(parent1);
                     list.remove(parent2);
 
-                    System.out.println("Energia przed rozmnażaniem: " + parent1.getEnergy() + " " + parent2.getEnergy());
 
                     parent1.giveBirth(energyLostToReproduce);
                     parent2.giveBirth(energyLostToReproduce);
@@ -247,7 +246,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                     animals.put(parent1.getPosition(), list);
                     animalsAlive += 1;
 
-                    System.out.println("Energia po rozmnażaniu: " + parent1.getEnergy() + " " + parent2.getEnergy());
                 }
             }
         }
@@ -260,6 +258,49 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public abstract HashMap<Vector2d, List<WorldElement>> getElements();
 
+    public String getMostPopularGenom() {
+        HashMap<String, Integer> genomsNumber = new HashMap<>();
+
+        for (Vector2d position: animals.keySet()) {
+            for (Animal animal: animals.get(position)) {
+                if (genomsNumber.containsKey(animal.getGenom().toString()))
+                    genomsNumber.put(animal.getGenom().toString(), genomsNumber.get(animal.getGenom().toString()) + 1);
+                else
+                    genomsNumber.put(animal.getGenom().toString(), 1);
+            }
+        }
+
+        int numberOfOccurencesOfMostPopularGenom = 0;
+        String mostPopularGenom = "";
+        for (String genom: genomsNumber.keySet()) {
+            if (genomsNumber.get(genom) > numberOfOccurencesOfMostPopularGenom) {
+                numberOfOccurencesOfMostPopularGenom = genomsNumber.get(genom);
+                mostPopularGenom = genom;
+            }
+        }
+
+        System.out.println(genomsNumber);
+        return mostPopularGenom;
+    }
+
+    public double averageNumberOfChildren() {
+        double sum = 0;
+
+        for (Vector2d position : animals.keySet()) {
+            for (Animal animal : animals.get(position))
+                sum += animal.getChildren();
+        }
+        return Math.round(sum / getAnimalsAlive() * 100.0) / 100.0;
+    }
+
+    public double averageAnimalEnergy() {
+        double sum = 0;
+        for (Vector2d position : animals.keySet()) {
+            for (Animal animal : animals.get(position))
+                sum += animal.getEnergy();
+        }
+        return sum / getAnimalsAlive();
+    }
 
     public int getWidth() {
         return width;
