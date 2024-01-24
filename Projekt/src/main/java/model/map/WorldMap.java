@@ -3,6 +3,7 @@ package model.map;
 import model.Animal;
 import model.Vector2d;
 import model.WorldElement;
+import model.observers.MapChangeListener;
 import model.util.MoveValidator;
 
 import java.util.HashMap;
@@ -71,4 +72,18 @@ public interface WorldMap extends MoveValidator {
      * @return HashMap of WorldElements.
      */
     HashMap<Vector2d, List<WorldElement>> getElements();
+
+    /**
+     * Function allowing to add observer to the map.
+     * @param observer defines the observer which is interested in watching map changes.
+     */
+
+    //W sumie to nie wiem czy potrzebne
+    void subscribe(MapChangeListener observer);
+
+    void unsubscribe(MapChangeListener observer);
+
+    int getWidth();
+
+    int getHeight();
 }

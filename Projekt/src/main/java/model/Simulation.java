@@ -5,7 +5,7 @@ import model.map.MapType;
 import model.map.TunnelMap;
 import model.map.WorldMap;
 
-public class Simulation {
+public class Simulation implements Runnable {
     private final WorldMap map;
     private int currentDay = 1;
 
