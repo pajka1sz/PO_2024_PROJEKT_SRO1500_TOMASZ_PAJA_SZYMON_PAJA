@@ -4,10 +4,12 @@ import model.map.Globe;
 import model.map.MapType;
 import model.map.TunnelMap;
 import model.map.WorldMap;
+import model.observers.MapChangeListener;
 
 public class Simulation implements Runnable {
     private final WorldMap map;
     private int currentDay = 1;
+    private MapChangeListener observer;
 
     public Simulation(MapType mapType, int width, int height, int numOfStartPlants, int energyAddedByAPlant,
                       int numOfNewPlantsEachDay, int numOfStartAnimals, int startAnimalEnergy, int energyLostEveryDay,
@@ -21,15 +23,17 @@ public class Simulation implements Runnable {
                     numOfStartAnimals, startAnimalEnergy, energyLostEveryDay, energyNeededToBeReadyToReproduce,
                     energyLostToReproduce, minMutations, maxMutations, genomType, genomLength, numOfTunnels);
         };
+        //mapChanged("Czas start");
     }
 
-    public synchronized void run() {
+    public void run() {
         while (map.getAnimals().size() > 0) {
             map.removeDeadAnimals(currentDay);
             map.moveAnimals();
             map.eatPlants();
             map.reproduce();
             map.addPlants();
+            //mapChanged("Zmiana");
             currentDay += 1;
             try {
                 Thread.sleep(500);
@@ -38,5 +42,9 @@ public class Simulation implements Runnable {
             }
         }
         System.out.println("Wszystkie zwierzaki umarły!");
+    }
+
+    public WorldMap getMap() {
+        return this.map;
     }
 }

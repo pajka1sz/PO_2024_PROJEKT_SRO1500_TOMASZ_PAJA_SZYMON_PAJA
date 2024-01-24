@@ -73,17 +73,25 @@ public interface WorldMap extends MoveValidator {
      */
     HashMap<Vector2d, List<WorldElement>> getElements();
 
-    /**
-     * Function allowing to add observer to the map.
-     * @param observer defines the observer which is interested in watching map changes.
-     */
+    int getWidth();
 
-    //W sumie to nie wiem czy potrzebne
+    int getHeight();
+
+    int getAnimalsAlive();
+
+    int getNumOfPlants();
+
+    int getNumOfFreePositions();
+
+    double getAverageLifeLengthOfDeadAnimals();
+
+    int getEquatorBottomLane();
+
+    int getEquatorUpLane();
+
     void subscribe(MapChangeListener observer);
 
     void unsubscribe(MapChangeListener observer);
 
-    int getWidth();
-
-    int getHeight();
+    void mapChanged(WorldMap map, String message);
 }

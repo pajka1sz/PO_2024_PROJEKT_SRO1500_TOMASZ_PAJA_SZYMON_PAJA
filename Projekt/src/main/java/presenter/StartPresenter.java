@@ -1,7 +1,18 @@
 package presenter;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import model.GenomType;
+import model.Simulation;
+import model.map.MapType;
+import model.map.WorldMap;
+import model.observers.MapChangeListener;
+
+import java.io.IOException;
 
 public class StartPresenter {
     private int ID = 0;
@@ -28,6 +39,8 @@ public class StartPresenter {
     @FXML
     public ComboBox<Integer> energyToReproduce;
     @FXML
+    public ComboBox<Integer> energyLostEveryDay;
+    @FXML
     public CheckBox tunnel;
     @FXML
     public CheckBox crazyGenom;
@@ -48,9 +61,11 @@ public class StartPresenter {
         for (int i = 0; i < 15; i++) {
             grassEnergy.getItems().add(i);
             genLength.getItems().add(i);
+            energyLostEveryDay.getItems().add(i);
         }
         grassEnergy.setValue(5);
         genLength.setValue(5);
+        energyLostEveryDay.setValue(5);
         for (int i = 0; i <= 10; i++) {
             energyToReproduce.getItems().add(i);
         }
@@ -127,5 +142,47 @@ public class StartPresenter {
         if (minimalGenMutations.getValue() > maximalGenMutations.getValue()){
             minimalGenMutations.setValue(maximalGenMutations.getValue());
         }
+    }
+
+    private void configureStage(Stage primaryStage, HBox viewRoot){
+        var scene = new Scene(viewRoot);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Simulation");
+        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
+        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+    }
+
+    public void startClicked() throws InterruptedException, IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
+        Stage stage = new Stage();
+        HBox hBox = fxmlLoader.load();
+
+        configureStage(stage, hBox);
+        stage.show();
+
+
+        MapType mapType = MapType.GLOBEMAP;
+        GenomType genomType = GenomType.NORMAL_GENOM;
+
+        if (tunnel.isSelected())
+            mapType = MapType.TUNNELMAP;
+        if (crazyGenom.isSelected())
+            genomType = GenomType.JUMPING_GENOM;
+        Simulation simulation = new Simulation(mapType, width.getValue(), height.getValue(), grassAmount.getValue(),
+                grassEnergy.getValue(), grassByDay.getValue(), animalsAmount.getValue(), startEnergy.getValue(),
+                energyLostEveryDay.getValue(), energyToReproduce.getValue(), reproduceEnergy.getValue(),
+                minimalGenMutations.getValue(), maximalGenMutations.getValue(), genomType, genLength.getValue(),
+                tunnelNumber.getValue());
+
+        SimulationPresenter presenter = fxmlLoader.getController();
+        //simulation.subscribe(presenter);
+        presenter.setMap(simulation.getMap());
+        WorldMap map = simulation.getMap();
+        map.subscribe(presenter);
+
+        simulation.run();
+
+
     }
 }

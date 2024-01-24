@@ -1,6 +1,7 @@
 package model.map;
 
 import model.*;
+import model.observers.MapChangeListener;
 import model.util.AnimalsListComparator;
 import model.util.RandomListGenerator;
 
@@ -31,6 +32,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int animalsAlive;
     private double sumOfDeadAnimalsLifeLengths = 0;
     private double numOfDeadAnimals = 0;
+    private MapChangeListener observer;
 
     public AbstractWorldMap(int width, int height, int numOfStartPlants, int energyAddedByAPlant, int numOfNewPlantsEachDay, int numOfStartAnimals,
                             int startAnimalEnergy, int energyLostEveryDay, int energyNeededToBeReadyToReproduce, int energyLostToReproduce, int minMutations, int maxMutations,
@@ -88,9 +90,9 @@ public abstract class AbstractWorldMap implements WorldMap {
                 return existingList;
             });
             animals.computeIfAbsent(position, (existingKey) -> {
-               List<Animal> existingList = new ArrayList<>();
-               existingList.add(new Animal(genomLength, startAnimalEnergy, position, genomType));
-               return existingList;
+                List<Animal> existingList = new ArrayList<>();
+                existingList.add(new Animal(genomLength, startAnimalEnergy, position, genomType));
+                return existingList;
             });
         }
         for (List<Animal> list: animals.values()) {
@@ -103,11 +105,24 @@ public abstract class AbstractWorldMap implements WorldMap {
             list.sort(new AnimalsListComparator());
         }
 
-
         //Creating new plants
         this.addStartPlants(numOfStartPlants);
     }
 
+    public void subscribe(MapChangeListener observer) {
+        this.observer = observer;
+    }
+
+    public void unsubscribe(MapChangeListener observer) {
+        this.observer = null;
+    }
+
+    public void mapChanged(WorldMap map, String message) {
+        if (observer != null) {
+            System.out.println("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALOOOOOOOOOOOOOOOOOOO");
+            observer.mapChanged(this, message);
+        }
+    }
 
     public abstract boolean canMoveTo(Vector2d position);
 
@@ -151,6 +166,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void addPlants() {
         addStartPlants(numOfNewPlantsEachDay);
+        mapChanged(this, "Nowe rośliny");
     }
 
     public void eatAPlant(Animal animal, int energyAddedByAPlant) {
@@ -205,7 +221,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (List<Animal> list: animals.values()) {
             if (list.size() >= 2) {
                 if (list.get(0).getEnergy() >= energyNeededToBeReadyToReproduce &&
-                    list.get(1).getEnergy() >= energyNeededToBeReadyToReproduce) {
+                        list.get(1).getEnergy() >= energyNeededToBeReadyToReproduce) {
                     Animal parent1 = list.get(0);
                     Animal parent2 = list.get(1);
 
@@ -230,6 +246,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 }
             }
         }
+        mapChanged(this, "Po reprodukcji");
     }
 
     public HashMap<Vector2d, List<Animal>> getAnimals() {
@@ -237,6 +254,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public abstract HashMap<Vector2d, List<WorldElement>> getElements();
+
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
     public int getAnimalsAlive() {
         return animalsAlive;
@@ -252,5 +278,13 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public double getAverageLifeLengthOfDeadAnimals() {
         return sumOfDeadAnimalsLifeLengths / numOfDeadAnimals;
+    }
+
+    public int getEquatorBottomLane() {
+        return equatorLaneBottom;
+    }
+
+    public int getEquatorUpLane() {
+        return equatorLaneUp;
     }
 }
