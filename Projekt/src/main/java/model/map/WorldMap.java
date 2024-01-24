@@ -28,9 +28,8 @@ public interface WorldMap extends MoveValidator {
 
     /**
      * Function which removes dead animals from the map.
-     * @param currentDay declares current day.
      */
-    void removeDeadAnimals(int currentDay);
+    void removeDeadAnimals();
 
     /**
      * Function which moves animals to their appropriate positions if it's possible.
@@ -94,4 +93,6 @@ public interface WorldMap extends MoveValidator {
     void unsubscribe(MapChangeListener observer);
 
     void mapChanged(WorldMap map, String message);
+
+    int getCurrentDay();
 }

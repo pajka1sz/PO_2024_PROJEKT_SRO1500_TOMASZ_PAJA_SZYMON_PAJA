@@ -8,11 +8,13 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.GenomType;
 import model.Simulation;
+import model.SimulationEngine;
 import model.map.MapType;
 import model.map.WorldMap;
 import model.observers.MapChangeListener;
 
 import java.io.IOException;
+import java.util.List;
 
 public class StartPresenter {
     private int ID = 0;
@@ -180,7 +182,10 @@ public class StartPresenter {
         presenter.setMap(simulation.getMap());
         WorldMap map = simulation.getMap();
         map.subscribe(presenter);
+        presenter.initializePresenter(map);
 
+//        SimulationEngine engine = new SimulationEngine(List.of(simulation));
+//        engine.runAsync();
         simulation.run();
 
 

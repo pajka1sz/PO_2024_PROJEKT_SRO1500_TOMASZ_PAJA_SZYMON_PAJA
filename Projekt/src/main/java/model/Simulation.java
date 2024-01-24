@@ -8,8 +8,9 @@ import model.observers.MapChangeListener;
 
 public class Simulation implements Runnable {
     private final WorldMap map;
-    private int currentDay = 1;
     private MapChangeListener observer;
+    private boolean threadPause = false;
+    private final Object GUI_PAUSE = new Object();
 
     public Simulation(MapType mapType, int width, int height, int numOfStartPlants, int energyAddedByAPlant,
                       int numOfNewPlantsEachDay, int numOfStartAnimals, int startAnimalEnergy, int energyLostEveryDay,
@@ -26,15 +27,21 @@ public class Simulation implements Runnable {
         //mapChanged("Czas start");
     }
 
+    private volatile boolean stopSimulation = false;
+
+    public void stopSimulation() {
+        stopSimulation = true;
+    }
+
     public void run() {
-        while (map.getAnimals().size() > 0) {
-            map.removeDeadAnimals(currentDay);
+        while (!stopSimulation && map.getAnimals().size() > 0) {
+            map.removeDeadAnimals();
             map.moveAnimals();
             map.eatPlants();
             map.reproduce();
             map.addPlants();
             //mapChanged("Zmiana");
-            currentDay += 1;
+            map.mapChanged(map, "Ruch");
             try {
                 Thread.sleep(500);
             } catch (InterruptedException exception) {

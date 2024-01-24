@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -33,6 +35,7 @@ public class SimulationPresenter implements MapChangeListener {
     private double maxAnimalEnergy;
     private double averageAnimalEnergy;
     private boolean pause = false;
+    Simulation simulation;
 
     //Do statystyk
     @FXML
@@ -47,7 +50,34 @@ public class SimulationPresenter implements MapChangeListener {
     Label averageNumberOfKids;
     @FXML
     Label averageLengthOfLifeOfDeadAnimal;
-    //private int
+    @FXML
+    Label days;
+    @FXML
+    Label genom;
+    @FXML
+    Label actualGen;
+    @FXML
+    Label actualEnergy;
+    @FXML
+    Label plantEaten;
+    @FXML
+    Label kidsNumber;
+    @FXML
+    Label descendantsNumber;
+    @FXML
+    Label daysLived;
+    @FXML
+    Label deathDay;
+
+    private Animal testAnimal;
+
+    public void initializePresenter(WorldMap map){
+        pause = false;
+        this.map = map;
+        for (Vector2d position: map.getAnimals().keySet()) {
+            testAnimal = map.getAnimals().get(position).get(0);
+        }
+    }
 
     public void setMap(WorldMap map) {
         this.map = map;
@@ -56,14 +86,20 @@ public class SimulationPresenter implements MapChangeListener {
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         System.out.println("TUUUUUUUUUUUUUUUUUUUUUUUUUUUUOOOOOOOOOOOOOOOOOO");
-        Platform.runLater(() -> drawMap(message));
+        drawMap(message, this.map);
     }
 
-    public void drawMap(String message) {
+    public void drawMap(String message, WorldMap map) {
         clearGrid();
-        updateGrid();
-        test.setText("Tu się będzie wszystko działo");
-        updateStats();
+        updateGrid(map);
+        System.out.println(message);
+        updateStats(map);
+        updateAnimalStats(testAnimal);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+
+        }
     }
 
     private void clearGrid() {
@@ -72,7 +108,7 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    private void updateGrid() {
+    private void updateGrid(WorldMap map) {
         calculateMaxAndAverageAnimalEnergy();
         Label label00 = new Label();
         mapGrid.add(label00, 0, 0);
@@ -170,7 +206,8 @@ public class SimulationPresenter implements MapChangeListener {
         averageAnimalEnergy = sum / map.getAnimalsAlive();
     }
 
-    private void updateStats() {
+    private void updateStats(WorldMap map) {
+        days.setText("Days: " + map.getCurrentDay());
         animalNumber.setText("Number of animals: " + map.getAnimalsAlive());
         grassNumber.setText("Number of grass: " + map.getNumOfPlants());
         freePlacesNumber.setText("Free places: " + map.getNumOfFreePositions());
@@ -178,5 +215,16 @@ public class SimulationPresenter implements MapChangeListener {
         //averageNumberOfKids.setText("Average number of kids: "+ );
         averageLengthOfLifeOfDeadAnimal.setText("Average length of life\nof dead animal: " + map.getAverageLifeLengthOfDeadAnimals());
 
+    }
+
+    private void updateAnimalStats(Animal animal) {
+        genom.setText("Genom: " + animal.getGenom());
+        actualGen.setText("Active gen: " + animal.getActiveGen());
+        actualEnergy.setText("Actual energy: " + animal.getEnergy());
+        plantEaten.setText("Plants eaten: " + animal.getPlantsEaten());
+        kidsNumber.setText("Kids number: " + animal.getChildren());
+        descendantsNumber.setText("Descendants number: " + animal.getAllChildren());
+        daysLived.setText("Days alive: " + animal.getDaysAlive());
+        deathDay.setText("Death day: " + animal.getDayOfDeath());
     }
 }

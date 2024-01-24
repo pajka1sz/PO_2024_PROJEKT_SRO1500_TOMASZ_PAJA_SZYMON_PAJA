@@ -16,6 +16,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected List<Vector2d> allPositions = new ArrayList<>();
 
 
+    private int currentDay = 0;
     protected int width;
     protected int height;
     private final int equatorLaneBottom;
@@ -180,7 +181,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    public void removeDeadAnimals(int currentDay) {
+    public void removeDeadAnimals() {
+        currentDay += 1;
         HashMap<Vector2d, List<Animal>> newHashMap = new HashMap<>();
         for (Vector2d position: animals.keySet()) {
             List<Animal> animalsOnPosition = animals.get(position);
@@ -286,5 +288,9 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public int getEquatorUpLane() {
         return equatorLaneUp;
+    }
+
+    public int getCurrentDay() {
+        return currentDay;
     }
 }
